@@ -9,6 +9,7 @@ import PipelineMonitor from './components/PipelineMonitor';
 import SecurityAlerts from './components/SecurityAlerts';
 import PlugAndPlayStudio from './components/PlugAndPlayStudio';
 import AnalyticsView from './components/AnalyticsView';
+import LogTimeMachine from './components/LogTimeMachine';
 import ErrorBoundary from './components/ErrorBoundary';
 
 const API_BASE = 'http://localhost:8000/api';
@@ -192,6 +193,10 @@ export default function App() {
                 isIngesting={isIngesting}
                 onSelectLog={handleSelectLogAndInspect}
               />
+            )}
+
+            {activeTab === 'timemachine' && (
+              <LogTimeMachine />
             )}
 
           {activeTab === 'ingest' && (

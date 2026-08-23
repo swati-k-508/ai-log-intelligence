@@ -9,12 +9,14 @@ import {
   Sliders, 
   BarChart3, 
   RefreshCw, 
-  Zap 
+  Zap,
+  History
 } from 'lucide-react';
 
 export default function Sidebar({ activeTab, setActiveTab, onResetDb, isResetting }) {
   const navItems = [
     { id: 'overview', label: 'Command Center', icon: LayoutDashboard, badge: 'Live' },
+    { id: 'timemachine', label: 'Log Time Machine', icon: History, badge: 'Replay' },
     { id: 'ingest', label: 'Log Ingestion', icon: UploadCloud },
     { id: 'explorer', label: 'Log Explorer', icon: Search },
     { id: 'beforeafter', label: 'Before / After', icon: GitCompare, highlight: true },
