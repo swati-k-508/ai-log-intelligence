@@ -10,7 +10,8 @@ import {
   Sliders, 
   BarChart3, 
   RefreshCw,
-  Bot
+  Bot,
+  History
 } from 'lucide-react';
 
 export default function Sidebar({ activeTab, setActiveTab, selectedSystem, onResetDb, isResetting }) {
@@ -19,6 +20,7 @@ export default function Sidebar({ activeTab, setActiveTab, selectedSystem, onRes
     { id: 'landing', label: 'Live Log Sources', icon: Activity, isFeatured: true },
     { id: 'system_center', label: `${systemShortName} Deck`, icon: Sliders, isSystem: true },
     { id: 'overview', label: 'Global Command', icon: LayoutDashboard },
+    { id: 'timemachine', label: 'Log Time Machine', icon: History, isReplay: true },
     { id: 'assistant', label: 'AI Security Copilot', icon: Bot, isAi: true },
     { id: 'ingest', label: 'Log Ingestion', icon: UploadCloud },
     { id: 'explorer', label: 'Log Explorer', icon: Search },
@@ -102,7 +104,7 @@ export default function Sidebar({ activeTab, setActiveTab, selectedSystem, onRes
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                <Icon size={16} color={isActive ? 'var(--pistachio-light)' : (item.isFeatured ? 'var(--sage-green)' : (item.isAi ? '#c084fc' : 'var(--blue-grey)'))} />
+                <Icon size={16} color={isActive ? 'var(--pistachio-light)' : (item.isFeatured ? 'var(--sage-green)' : (item.isAi ? '#c084fc' : (item.isReplay ? '#facc15' : 'var(--blue-grey)')))} />
                 <span>{item.label}</span>
               </div>
               {item.isFeatured && (
@@ -116,6 +118,19 @@ export default function Sidebar({ activeTab, setActiveTab, selectedSystem, onRes
                   borderRadius: '3px'
                 }} className="mono">
                   LIVE
+                </span>
+              )}
+              {item.isReplay && (
+                <span style={{
+                  fontSize: '0.58rem',
+                  fontWeight: 700,
+                  background: 'rgba(234, 179, 8, 0.15)',
+                  color: '#facc15',
+                  border: '1px solid rgba(234, 179, 8, 0.4)',
+                  padding: '0.05rem 0.35rem',
+                  borderRadius: '3px'
+                }} className="mono">
+                  REPLAY
                 </span>
               )}
               {item.isSystem && (

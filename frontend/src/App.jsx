@@ -11,6 +11,8 @@ import PlugAndPlayStudio from './components/PlugAndPlayStudio';
 import AnalyticsView from './components/AnalyticsView';
 import LiveLogSourcesLanding from './components/LiveLogSourcesLanding';
 import SystemCommandCenter from './components/SystemCommandCenter';
+import AIChatAssistant from './components/AIChatAssistant';
+import LogTimeMachine from './components/LogTimeMachine';
 import ErrorBoundary from './components/ErrorBoundary';
 
 const API_BASE = 'http://localhost:8000/api';
@@ -285,6 +287,10 @@ export default function App() {
                 onSelectLogAndInspect={handleSelectLogAndInspect}
                 activeThreatCount={alerts.length}
               />
+            )}
+
+            {activeTab === 'timemachine' && (
+              <LogTimeMachine />
             )}
 
             {activeTab === 'ingest' && (

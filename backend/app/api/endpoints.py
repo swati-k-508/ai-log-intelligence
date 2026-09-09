@@ -2,7 +2,9 @@ import json
 from datetime import datetime, timezone
 from typing import Optional, List, Dict, Any
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, Query
+# pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
+# pyrefly: ignore [missing-import]
 from pydantic import BaseModel
 
 from ..db.database import get_db
@@ -16,6 +18,7 @@ from ..generators.log_generators import (
     generate_logs_for_source,
     LOG_SOURCES
 )
+from ..pipeline.incident_reconstruction import build_incidents_from_db, get_demo_incident
 
 router = APIRouter(prefix="/api")
 
@@ -627,3 +630,29 @@ def get_system_timeseries(source_id: str, db: Session = Depends(get_db)):
 
 
 
+# 9. Log Time Machine & Incident Replay Endpoints
+@router.get("/incidents")
+def get_incidents(db: Session = Depends(get_db)):
+    """
+    Returns available reconstructed incident timelines from live DB normalized logs
+    plus the built-in deterministic multi-stage Demo Incident.
+    """
+    incidents = build_incidents_from_db(db)
+    return {
+        "total": len(incidents),
+        "incidents": incidents
+    }
+
+@router.get("/incidents/{incident_id}")
+def get_incident_detail(incident_id: str, db: Session = Depends(get_db)):
+    """
+    Returns step-by-step incident replay events, risk progression, correlation chains,
+    baseline comparisons, and 1:1 raw log traceability links for a specific incident.
+    """
+    incidents = build_incidents_from_db(db)
+    for inc in incidents:
+        if inc["id"] == incident_id:
+            return inc
+    
+    # Fallback to demo incident if ID is demo-related or not found
+    return get_demo_incident()
