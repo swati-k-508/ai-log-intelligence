@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Filter, VolumeX, Volume2, Database, Table } from 'lucide-react';
+import { Search, Filter, VolumeX, Volume2 } from 'lucide-react';
 
 export default function LogExplorer({ logs, onSelectLog }) {
   const [searchTerm, setSearchTerm] = useState('');
@@ -25,121 +25,119 @@ export default function LogExplorer({ logs, onSelectLog }) {
   });
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      <div className="cyber-card" style={{ padding: '1.25rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+      
+      {/* Header & Controls Bar */}
+      <div className="eng-card" style={{ padding: '0.75rem 1rem', display: 'flex', flexWrap: 'wrap', gap: '0.75rem', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
-          <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-            <Table size={22} color="#00f0ff" /> ASTERIA Log Explorer Console ({filteredLogs.length})
-          </h2>
-          <p style={{ fontSize: '0.825rem', color: '#94a3b8', marginTop: '0.2rem' }}>
-            Query, filter, and inspect structured normalized events in real-time.
-          </p>
-        </div>
-      </div>
-
-      {/* Filter Control Bar */}
-      <div className="cyber-card" style={{ padding: '0.85rem 1.1rem', display: 'flex', flexWrap: 'wrap', gap: '0.75rem', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: '1 1 300px' }}>
-          <div style={{ position: 'relative', width: '100%' }}>
-            <Search size={16} color="#64748b" style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)' }} />
-            <input
-              type="text"
-              className="cyber-input"
-              placeholder="Search IP, User, Event Type, Format..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              style={{ paddingLeft: '2.4rem' }}
-            />
+          <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#f0f6fc' }}>
+            Structured Event Explorer ({filteredLogs.length} matching)
           </div>
+          <span style={{ fontSize: '0.7rem', color: '#8b949e' }}>
+            Normalized canonical events stored in SQLite database. Click any row to inspect 1:1 raw trace.
+          </span>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-          <select 
-            className="cyber-input" 
-            value={formatFilter} 
-            onChange={(e) => setFormatFilter(e.target.value)}
-            style={{ width: 'auto' }}
-          >
-            <option value="">All Formats</option>
-            <option value="SYSLOG">SYSLOG</option>
-            <option value="KV_PIPE">KV_PIPE</option>
-            <option value="BRACKETED">BRACKETED</option>
-            <option value="JSON_LINES">JSON_LINES</option>
-            <option value="PALO_ALTO_CSV">PALO_ALTO_CSV</option>
-          </select>
-
-          <select 
-            className="cyber-input" 
-            value={eventTypeFilter} 
-            onChange={(e) => setEventTypeFilter(e.target.value)}
-            style={{ width: 'auto' }}
-          >
-            <option value="">All Event Types</option>
-            <option value="AUTHENTICATION_FAILURE">AUTHENTICATION_FAILURE</option>
-            <option value="AUTHENTICATION_SUCCESS">AUTHENTICATION_SUCCESS</option>
-            <option value="PRIVILEGE_ESCALATION">PRIVILEGE_ESCALATION</option>
-            <option value="PORT_SCAN">PORT_SCAN</option>
-            <option value="CONNECTION_BLOCKED">CONNECTION_BLOCKED</option>
-            <option value="SYSTEM_CHATTER">SYSTEM_CHATTER</option>
-          </select>
-
-          <select 
-            className="cyber-input" 
-            value={severityFilter} 
-            onChange={(e) => setSeverityFilter(e.target.value)}
-            style={{ width: 'auto' }}
-          >
-            <option value="">All Severities</option>
-            <option value="CRITICAL">CRITICAL</option>
-            <option value="HIGH">HIGH</option>
-            <option value="MEDIUM">MEDIUM</option>
-            <option value="LOW">LOW</option>
-            <option value="INFO">INFO</option>
-          </select>
-
           <button 
             onClick={() => setHideNoise(!hideNoise)}
-            className="btn-cyber-secondary"
+            className="btn-eng-secondary"
             style={{ 
-              padding: '0.45rem 0.75rem', 
-              fontSize: '0.78rem',
-              borderColor: hideNoise ? '#00f0ff' : '#1e293b',
-              color: hideNoise ? '#00f0ff' : '#94a3b8',
-              background: hideNoise ? 'rgba(0, 240, 255, 0.1)' : '#0f172a'
+              padding: '0.35rem 0.65rem', 
+              fontSize: '0.74rem',
+              borderColor: hideNoise ? '#3b82f6' : '#30363d',
+              color: hideNoise ? '#3b82f6' : '#8b949e',
+              background: hideNoise ? '#162032' : '#21262d'
             }}
           >
-            {hideNoise ? <VolumeX size={14} color="#00f0ff" /> : <Volume2 size={14} />}
-            {hideNoise ? "Noise Hidden" : "Show All"}
+            {hideNoise ? <VolumeX size={13} color="#3b82f6" /> : <Volume2 size={13} />}
+            {hideNoise ? "Noise Masked" : "Show All"}
           </button>
         </div>
       </div>
 
-      {/* Explorer Data Grid */}
-      <div className="cyber-card" style={{ padding: '1.25rem' }}>
-        <div style={{ overflowX: 'auto', maxHeight: '550px' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.8rem' }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid #1b263b', textAlign: 'left', color: '#64748b' }}>
-                <th style={{ padding: '0.5rem 0.75rem' }}>Timestamp</th>
-                <th style={{ padding: '0.5rem 0.75rem' }}>Severity</th>
-                <th style={{ padding: '0.5rem 0.75rem' }}>Canonical Event Type</th>
-                <th style={{ padding: '0.5rem 0.75rem' }}>Category</th>
-                <th style={{ padding: '0.5rem 0.75rem' }}>Source IP</th>
-                <th style={{ padding: '0.5rem 0.75rem' }}>Target User</th>
-                <th style={{ padding: '0.5rem 0.75rem' }}>Action</th>
-                <th style={{ padding: '0.5rem 0.75rem' }}>Format</th>
-                <th style={{ padding: '0.5rem 0.75rem' }}>Count</th>
+      {/* Filter Control Inputs */}
+      <div className="eng-card" style={{ padding: '0.65rem 0.85rem', display: 'flex', flexWrap: 'wrap', gap: '0.6rem', alignItems: 'center' }}>
+        <div style={{ position: 'relative', flex: '1 1 240px' }}>
+          <Search size={14} color="#6e7681" style={{ position: 'absolute', left: '0.65rem', top: '50%', transform: 'translateY(-50%)' }} />
+          <input
+            type="text"
+            className="eng-input"
+            placeholder="Search IP, user, event type..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ paddingLeft: '2rem', fontSize: '0.78rem' }}
+          />
+        </div>
+
+        <select 
+          className="eng-input" 
+          value={formatFilter} 
+          onChange={(e) => setFormatFilter(e.target.value)}
+          style={{ width: 'auto', fontSize: '0.78rem' }}
+        >
+          <option value="">All Formats</option>
+          <option value="SYSLOG">SYSLOG</option>
+          <option value="KV_PIPE">KV_PIPE</option>
+          <option value="BRACKETED">BRACKETED</option>
+          <option value="JSON_LINES">JSON_LINES</option>
+          <option value="PALO_ALTO_CSV">PALO_ALTO_CSV</option>
+        </select>
+
+        <select 
+          className="eng-input" 
+          value={eventTypeFilter} 
+          onChange={(e) => setEventTypeFilter(e.target.value)}
+          style={{ width: 'auto', fontSize: '0.78rem' }}
+        >
+          <option value="">All Event Types</option>
+          <option value="AUTHENTICATION_FAILURE">AUTHENTICATION_FAILURE</option>
+          <option value="AUTHENTICATION_SUCCESS">AUTHENTICATION_SUCCESS</option>
+          <option value="PRIVILEGE_ESCALATION">PRIVILEGE_ESCALATION</option>
+          <option value="PORT_SCAN">PORT_SCAN</option>
+          <option value="CONNECTION_BLOCKED">CONNECTION_BLOCKED</option>
+          <option value="SYSTEM_CHATTER">SYSTEM_CHATTER</option>
+        </select>
+
+        <select 
+          className="eng-input" 
+          value={severityFilter} 
+          onChange={(e) => setSeverityFilter(e.target.value)}
+          style={{ width: 'auto', fontSize: '0.78rem' }}
+        >
+          <option value="">All Severities</option>
+          <option value="CRITICAL">CRITICAL</option>
+          <option value="HIGH">HIGH</option>
+          <option value="MEDIUM">MEDIUM</option>
+          <option value="LOW">LOW</option>
+        </select>
+      </div>
+
+      {/* High Density Forensic Table */}
+      <div className="eng-card" style={{ overflowX: 'auto' }}>
+        <table className="eng-table">
+          <thead>
+            <tr>
+              <th>Timestamp (UTC)</th>
+              <th>Severity</th>
+              <th>Canonical Event Type</th>
+              <th>Category</th>
+              <th>Source IP</th>
+              <th>User</th>
+              <th>Action</th>
+              <th>Format</th>
+              <th>Duplicates</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredLogs.length === 0 ? (
+              <tr>
+                <td colSpan="9" style={{ textAlign: 'center', padding: '2rem', color: '#6e7681' }}>
+                  No matching log events found in index.
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {filteredLogs.length === 0 && (
-                <tr>
-                  <td colSpan={9} style={{ padding: '2.5rem', textAlign: 'center', color: '#64748b' }}>
-                    No events match the specified search and filter criteria.
-                  </td>
-                </tr>
-              )}
-              {filteredLogs.map((l) => {
+            ) : (
+              filteredLogs.map((l) => {
                 const sevClass = 
                   l.severity === 'CRITICAL' ? 'badge-sev-critical' :
                   l.severity === 'HIGH' ? 'badge-sev-high' :
@@ -147,53 +145,45 @@ export default function LogExplorer({ logs, onSelectLog }) {
 
                 const fmtClass = 
                   l.format_detected === 'SYSLOG' ? 'badge-syslog' :
-                  l.format_detected === 'KV_PIPE' ? 'badge-kv' :
-                  l.format_detected === 'BRACKETED' ? 'badge-bracketed' :
-                  l.format_detected === 'JSON_LINES' ? 'badge-json' :
-                  l.format_detected === 'PALO_ALTO_CSV' ? 'badge-custom' : 'badge-malformed';
+                  l.format_detected === 'JSON_LINES' ? 'badge-json' : 'badge-kv';
 
                 return (
-                  <tr 
-                    key={l.id} 
-                    onClick={() => onSelectLog && onSelectLog(l.id)}
-                    style={{ borderBottom: '1px solid #131b2e', cursor: 'pointer', transition: 'background 0.15s ease' }}
-                    onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(0, 240, 255, 0.05)'}
-                    onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-                  >
-                    <td style={{ padding: '0.5rem 0.75rem', color: '#94a3b8' }} className="mono">
-                      {l.timestamp ? l.timestamp.replace('Z', '').replace('T', ' ') : '--:--:--'}
+                  <tr key={l.id} onClick={() => onSelectLog(l.id)} style={{ cursor: 'pointer' }} title="Click to view 1:1 trace">
+                    <td className="mono" style={{ color: '#8b949e', fontSize: '0.74rem' }}>
+                      {l.timestamp}
                     </td>
-                    <td style={{ padding: '0.5rem 0.75rem' }}>
+                    <td>
                       <span className={`badge-sev ${sevClass}`}>{l.severity}</span>
                     </td>
-                    <td style={{ padding: '0.5rem 0.75rem', fontWeight: 700, color: '#f8fafc' }}>
+                    <td className="mono" style={{ fontWeight: 600, color: '#f0f6fc', fontSize: '0.74rem' }}>
                       {l.event_type}
                     </td>
-                    <td style={{ padding: '0.5rem 0.75rem', color: '#60a5fa' }}>
+                    <td style={{ color: '#8b949e' }}>
                       {l.category}
                     </td>
-                    <td style={{ padding: '0.5rem 0.75rem', color: '#00f0ff' }} className="mono">
-                      {l.source_ip || 'N/A'}
+                    <td className="mono" style={{ color: '#3b82f6' }}>
+                      {l.source_ip || '-'}
                     </td>
-                    <td style={{ padding: '0.5rem 0.75rem', color: '#e2e8f0' }}>
-                      {l.user || 'N/A'}
+                    <td style={{ color: '#c9d1d9' }}>
+                      {l.user || '-'}
                     </td>
-                    <td style={{ padding: '0.5rem 0.75rem', fontWeight: 600, color: l.action === 'DENY' || l.action === 'DROP' ? '#fb7185' : '#34d399' }}>
-                      {l.action}
+                    <td style={{ color: l.action === 'DENY' || l.action === 'DROP' ? '#ef4444' : '#8b949e' }}>
+                      {l.action || '-'}
                     </td>
-                    <td style={{ padding: '0.5rem 0.75rem' }}>
+                    <td>
                       <span className={`badge-fmt ${fmtClass}`}>{l.format_detected}</span>
                     </td>
-                    <td style={{ padding: '0.5rem 0.75rem', color: l.dup_count > 1 ? '#c084fc' : '#64748b' }} className="mono">
+                    <td className="mono" style={{ color: l.dup_count > 1 ? '#3b82f6' : '#6e7681', fontWeight: l.dup_count > 1 ? 700 : 400 }}>
                       {l.dup_count > 1 ? `x${l.dup_count}` : '1'}
                     </td>
                   </tr>
                 );
-              })}
-            </tbody>
-          </table>
-        </div>
+              })
+            )}
+          </tbody>
+        </table>
       </div>
+
     </div>
   );
 }

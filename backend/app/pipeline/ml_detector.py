@@ -39,7 +39,8 @@ def run_ml_anomaly_detection(db: Session) -> List[Alert]:
         
         stat = ip_stats[ip]
         stat["total_count"] += log.dup_count
-        stat["event_ids"].append(log.id)
+        if len(stat["event_ids"]) < 50:
+            stat["event_ids"].append(log.id)
         stat["last_seen"] = log.timestamp
 
         if log.user:

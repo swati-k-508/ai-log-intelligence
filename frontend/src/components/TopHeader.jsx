@@ -1,67 +1,68 @@
 import React from 'react';
-import { Cpu, Database, Layers, Radio } from 'lucide-react';
+import { Bot } from 'lucide-react';
 
-export default function TopHeader({ rawLogCount = 0 }) {
+export default function TopHeader({ rawLogCount = 0, onOpenAi }) {
   return (
     <header style={{
-      background: '#090e1a',
-      borderBottom: '1px solid #1b263b',
-      padding: '0.85rem 1.5rem',
+      background: 'var(--charcoal)',
+      borderBottom: '1px solid var(--border-default)',
+      padding: '0.65rem 1.25rem',
       display: 'flex',
-      justify: 'space-between',
+      justifyContent: 'space-between',
       alignItems: 'center',
       flexWrap: 'wrap',
-      gap: '1rem'
+      gap: '0.75rem'
     }}>
-      {/* Product Title */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <span style={{ fontSize: '1.15rem', fontWeight: 800, color: '#f8fafc', letterSpacing: '0.04em' }} className="mono">
-              ASTERIA <span style={{ color: '#00f0ff', fontWeight: 400 }}>ENGINE</span>
-            </span>
-          </div>
-          <p style={{ fontSize: '0.78rem', color: '#94a3b8', marginTop: '0.15rem' }}>
-            Universal Log Pre-processing Framework — Lossless Ingest, Taxonomy Normalization & Threat Analytics
-          </p>
+      {/* Title & PS ID */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <div style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-primary)' }} className="mono">
+          ULPF ENGINE <span style={{ color: 'var(--blue-grey)', fontWeight: 400 }}>// NTRO PS 26156</span>
         </div>
+        <span style={{ fontSize: '0.75rem', color: 'var(--pale-sage)', borderLeft: '1px solid var(--border-default)', paddingLeft: '0.75rem' }}>
+          Heterogeneous Log Normalization • 60s Sliding Window Deduplication • 1:1 Traceability
+        </span>
       </div>
 
-      {/* Telemetry Status Bar */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', flexWrap: 'wrap' }}>
-        {/* Status 1: Pipeline Online */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: '#070b14', border: '1px solid #1b263b', padding: '0.4rem 0.75rem', borderRadius: '0.375rem' }}>
-          <span className="pulse-dot pulse-dot-green"></span>
-          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#34d399' }}>PIPELINE ONLINE</span>
+      {/* Telemetry Status Items & AI Quick Launcher */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
+        {/* Status 1: API Online */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', background: 'var(--dark-slate)', border: '1px solid var(--border-default)', padding: '0.25rem 0.55rem', borderRadius: '4px' }}>
+          <span className="live-dot" />
+          <span style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--pistachio-light)' }} className="mono">API: 8000 OK</span>
         </div>
 
-        {/* Status 2: Logs Ingested */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: '#070b14', border: '1px solid #1b263b', padding: '0.4rem 0.75rem', borderRadius: '0.375rem' }}>
-          <Radio size={14} color="#00f0ff" />
-          <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Ingested: </span>
-          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#00f0ff' }} className="mono">{rawLogCount} events</span>
+        {/* Status 2: Ingested */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', background: 'var(--dark-slate)', border: '1px solid var(--border-default)', padding: '0.25rem 0.55rem', borderRadius: '4px' }}>
+          <span style={{ fontSize: '0.72rem', color: 'var(--blue-grey)' }}>Raw Buffer:</span>
+          <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--pistachio-light)' }} className="mono">{rawLogCount} logs</span>
         </div>
 
-        {/* Status 3: Parser Engine */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: '#070b14', border: '1px solid #1b263b', padding: '0.4rem 0.75rem', borderRadius: '0.375rem' }}>
-          <Layers size={14} color="#3b82f6" />
-          <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Parser: </span>
-          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#60a5fa' }}>Auto-Detect Active</span>
+        {/* Status 3: ML Detector */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', background: 'var(--dark-slate)', border: '1px solid var(--border-default)', padding: '0.25rem 0.55rem', borderRadius: '4px' }}>
+          <span style={{ fontSize: '0.72rem', color: 'var(--blue-grey)' }}>ML Detector:</span>
+          <span style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--sage-green)' }} className="mono">IsolationForest</span>
         </div>
 
-        {/* Status 4: Detection Engine */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: '#070b14', border: '1px solid #1b263b', padding: '0.4rem 0.75rem', borderRadius: '0.375rem' }}>
-          <Cpu size={14} color="#8b5cf6" />
-          <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>ML Detector: </span>
-          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#c084fc' }}>Isolation Forest</span>
-        </div>
-
-        {/* Status 5: Database */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: '#070b14', border: '1px solid #1b263b', padding: '0.4rem 0.75rem', borderRadius: '0.375rem' }}>
-          <Database size={14} color="#10b981" />
-          <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Database: </span>
-          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#34d399' }}>SQLite Storage</span>
-        </div>
+        {/* AI Copilot Quick Button */}
+        {onOpenAi && (
+          <button 
+            onClick={onOpenAi}
+            className="btn-cyber-secondary"
+            style={{
+              padding: '0.25rem 0.6rem',
+              fontSize: '0.72rem',
+              background: 'rgba(168, 85, 247, 0.12)',
+              border: '1px solid rgba(168, 85, 247, 0.4)',
+              color: '#c084fc',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              cursor: 'pointer'
+            }}
+          >
+            <Bot size={13} color="#c084fc" /> AI Copilot
+          </button>
+        )}
       </div>
     </header>
   );

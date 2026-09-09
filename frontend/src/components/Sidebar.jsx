@@ -1,5 +1,6 @@
 import React from 'react';
 import { 
+  Activity,
   LayoutDashboard, 
   UploadCloud, 
   Search, 
@@ -8,62 +9,72 @@ import {
   ShieldAlert, 
   Sliders, 
   BarChart3, 
-  RefreshCw, 
-  Zap 
+  RefreshCw,
+  Bot
 } from 'lucide-react';
 
-export default function Sidebar({ activeTab, setActiveTab, onResetDb, isResetting }) {
+export default function Sidebar({ activeTab, setActiveTab, selectedSystem, onResetDb, isResetting }) {
+  const systemShortName = selectedSystem?.name ? (selectedSystem.name.length > 12 ? selectedSystem.name.substring(0, 11) + '..' : selectedSystem.name) : 'System';
   const navItems = [
-    { id: 'overview', label: 'Command Center', icon: LayoutDashboard, badge: 'Live' },
+    { id: 'landing', label: 'Live Log Sources', icon: Activity, isFeatured: true },
+    { id: 'system_center', label: `${systemShortName} Deck`, icon: Sliders, isSystem: true },
+    { id: 'overview', label: 'Global Command', icon: LayoutDashboard },
+    { id: 'assistant', label: 'AI Security Copilot', icon: Bot, isAi: true },
     { id: 'ingest', label: 'Log Ingestion', icon: UploadCloud },
     { id: 'explorer', label: 'Log Explorer', icon: Search },
-    { id: 'beforeafter', label: 'Before / After', icon: GitCompare, highlight: true },
-    { id: 'pipeline', label: 'Pipeline Monitor', icon: GitCommit },
-    { id: 'alerts', label: 'Security Alerts', icon: ShieldAlert },
+    { id: 'beforeafter', label: 'Before / After Trace', icon: GitCompare },
+    { id: 'pipeline', label: 'Pipeline Stages', icon: GitCommit },
+    { id: 'alerts', label: 'Threat Alerts', icon: ShieldAlert },
     { id: 'parsers', label: 'Parser Studio', icon: Sliders },
-    { id: 'analytics', label: 'Log Analytics', icon: BarChart3 },
+    { id: 'analytics', label: 'Taxonomy Analytics', icon: BarChart3 },
   ];
 
   return (
     <aside style={{
-      width: '260px',
-      background: '#090e1a',
-      borderRight: '1px solid #1b263b',
+      width: '240px',
+      background: 'var(--charcoal)',
+      borderRight: '1px solid var(--border-default)',
       display: 'flex',
       flexDirection: 'column',
       minHeight: '100vh',
       zIndex: 10,
       flexShrink: 0
     }}>
-      {/* Brand Header */}
-      <div style={{ padding: '1.25rem 1.25rem 1rem', borderBottom: '1px solid #1b263b' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+      {/* Hackathon Engineering Header */}
+      <div style={{ padding: '1rem 1.1rem', borderBottom: '1px solid var(--border-default)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
           <div style={{
-            background: 'linear-gradient(135deg, #00f0ff 0%, #3b82f6 100%)',
-            width: '36px',
-            height: '36px',
-            borderRadius: '0.5rem',
+            background: 'rgba(168, 193, 176, 0.15)',
+            border: '1px solid var(--sage-green)',
+            color: 'var(--pistachio-light)',
+            width: '28px',
+            height: '28px',
+            borderRadius: '4px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 0 16px rgba(0, 240, 255, 0.4)'
-          }}>
-            <Zap color="#040914" size={22} strokeWidth={2.5} />
+            fontSize: '0.85rem',
+            fontWeight: 800
+          }} className="mono">
+            //
           </div>
           <div>
-            <div style={{ fontSize: '1.2rem', fontWeight: 800, letterSpacing: '0.05em', color: '#f8fafc' }} className="mono">
-              ASTERIA
+            <div style={{ fontSize: '0.95rem', fontWeight: 800, letterSpacing: '0.04em', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.35rem' }} className="mono">
+              ASTERIA <span style={{ fontSize: '0.65rem', color: 'var(--blue-grey)', fontWeight: 500 }}>v1.5</span>
             </div>
-            <div style={{ fontSize: '0.72rem', color: '#00f0ff', fontWeight: 600, letterSpacing: '-0.01em' }}>
-              Log Pre-processing Engine
+            <div style={{ fontSize: '0.68rem', color: 'var(--pale-sage)', fontWeight: 500 }}>
+              ULPF Core Engine • NTRO
             </div>
           </div>
         </div>
       </div>
 
-      {/* Navigation List */}
-      <nav style={{ flex: 1, padding: '1rem 0.75rem', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-        
+      {/* Navigation Links */}
+      <nav style={{ flex: 1, padding: '0.75rem 0.5rem', display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+        <div style={{ fontSize: '0.65rem', fontWeight: 700, color: 'var(--blue-grey)', textTransform: 'uppercase', letterSpacing: '0.08em', padding: '0.35rem 0.6rem' }}>
+          Platform Navigation
+        </div>
+
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
@@ -75,25 +86,62 @@ export default function Sidebar({ activeTab, setActiveTab, onResetDb, isResettin
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                padding: '0.65rem 0.85rem',
-                borderRadius: '0.375rem',
-                fontSize: '0.85rem',
+                padding: '0.5rem 0.65rem',
+                borderRadius: '4px',
+                fontSize: '0.82rem',
                 fontWeight: isActive ? 700 : 500,
-                color: isActive ? '#00f0ff' : '#94a3b8',
-                background: isActive ? 'rgba(0, 240, 255, 0.1)' : 'transparent',
-                border: isActive ? '1px solid rgba(0, 240, 255, 0.3)' : '1px solid transparent',
+                color: isActive ? 'var(--pistachio-light)' : 'var(--pale-sage)',
+                background: isActive ? 'rgba(168, 193, 176, 0.15)' : 'transparent',
+                borderLeft: isActive ? '3px solid var(--pistachio-light)' : '3px solid transparent',
+                borderTop: 'none',
+                borderRight: 'none',
+                borderBottom: 'none',
                 cursor: 'pointer',
-                transition: 'all 0.15s ease',
+                transition: 'all 0.12s ease',
                 textAlign: 'left'
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <Icon size={18} color={isActive ? '#00f0ff' : '#64748b'} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                <Icon size={16} color={isActive ? 'var(--pistachio-light)' : (item.isFeatured ? 'var(--sage-green)' : (item.isAi ? '#c084fc' : 'var(--blue-grey)'))} />
                 <span>{item.label}</span>
               </div>
-              {item.badge && (
-                <span style={{ fontSize: '0.65rem', background: 'rgba(16, 185, 129, 0.2)', color: '#34d399', padding: '0.1rem 0.4rem', borderRadius: '4px', fontWeight: 700 }}>
-                  {item.badge}
+              {item.isFeatured && (
+                <span style={{
+                  fontSize: '0.58rem',
+                  fontWeight: 700,
+                  background: 'rgba(216, 232, 200, 0.2)',
+                  color: 'var(--pistachio-light)',
+                  border: '1px solid var(--sage-green)',
+                  padding: '0.05rem 0.35rem',
+                  borderRadius: '3px'
+                }} className="mono">
+                  LIVE
+                </span>
+              )}
+              {item.isSystem && (
+                <span style={{
+                  fontSize: '0.58rem',
+                  fontWeight: 700,
+                  background: 'rgba(59, 130, 246, 0.15)',
+                  color: '#60a5fa',
+                  border: '1px solid rgba(59, 130, 246, 0.4)',
+                  padding: '0.05rem 0.35rem',
+                  borderRadius: '3px'
+                }} className="mono">
+                  DECK
+                </span>
+              )}
+              {item.isAi && (
+                <span style={{
+                  fontSize: '0.58rem',
+                  fontWeight: 700,
+                  background: 'rgba(168, 85, 247, 0.15)',
+                  color: '#c084fc',
+                  border: '1px solid rgba(168, 85, 247, 0.4)',
+                  padding: '0.05rem 0.35rem',
+                  borderRadius: '3px'
+                }} className="mono">
+                  AI
                 </span>
               )}
             </button>
@@ -101,17 +149,17 @@ export default function Sidebar({ activeTab, setActiveTab, onResetDb, isResettin
         })}
       </nav>
 
-      {/* Sidebar Footer Controls */}
-      <div style={{ padding: '1rem', borderTop: '1px solid #1b263b', background: '#070b14' }}>
+      {/* Database Reset Action Panel */}
+      <div style={{ padding: '0.75rem', borderTop: '1px solid var(--border-default)', background: 'var(--dark-slate)' }}>
         <button
           onClick={onResetDb}
           disabled={isResetting}
           className="btn-cyber-secondary"
-          style={{ width: '100%', justifyContent: 'center', fontSize: '0.78rem', padding: '0.5rem' }}
+          style={{ width: '100%', justifyContent: 'center', fontSize: '0.75rem', padding: '0.45rem' }}
           title="Reset database to clear logs and run fresh demo"
         >
-          <RefreshCw size={14} className={isResetting ? "animate-spin" : ""} />
-          {isResetting ? "Resetting Database..." : "Reset Pipeline DB"}
+          <RefreshCw size={13} className={isResetting ? "animate-spin" : ""} />
+          {isResetting ? "Resetting DB..." : "Flush & Reset DB"}
         </button>
       </div>
     </aside>

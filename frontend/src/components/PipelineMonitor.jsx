@@ -1,5 +1,5 @@
 import React from 'react';
-import { GitCommit, Database, Layers, Copy, CheckCircle2, ShieldCheck, Cpu, ArrowRight } from 'lucide-react';
+import { GitCommit, Database, Layers, Copy, CheckCircle2, ShieldCheck, Cpu } from 'lucide-react';
 
 export default function PipelineMonitor({ metrics }) {
   const funnel = metrics?.funnel || {
@@ -14,108 +14,91 @@ export default function PipelineMonitor({ metrics }) {
 
   const stages = [
     {
-      step: "STAGE 1",
+      step: "STAGE 01",
       name: "Lossless Raw Capture",
-      desc: "Stores raw log text verbatim in database before any modification.",
+      desc: "Captures and stores verbatim log text unmodified in the database prior to processing.",
       count: funnel.raw_received,
-      unit: "raw logs captured",
-      status: "ACTIVE",
-      icon: Database,
-      color: "#00f0ff"
+      unit: "raw logs",
+      status: "ACTIVE"
     },
     {
-      step: "STAGE 2",
+      step: "STAGE 02",
       name: "Multi-Format Parser Engine",
-      desc: "Auto-detects Syslog, KV Pipe, Bracketed, JSON Lines & Custom Config Plugins.",
+      desc: "Auto-detects Syslog, KV Pipe, Bracketed, JSON Lines & Custom Regex Plugins.",
       count: funnel.parsed,
-      unit: "parsed logs",
-      status: "ACTIVE",
-      icon: Layers,
-      color: "#60a5fa"
+      unit: "parsed records",
+      status: "ACTIVE"
     },
     {
-      step: "STAGE 3",
+      step: "STAGE 03",
       name: "Sliding Window Deduplication",
-      desc: "Collapses duplicate identical events within a 60-second sliding time window.",
+      desc: "Collapses duplicate events within a 60-second sliding time window, incrementing dup_count.",
       count: funnel.deduplicated_collapsed,
       unit: "duplicates merged",
-      status: "ACTIVE",
-      icon: Copy,
-      color: "#c084fc"
+      status: "ACTIVE"
     },
     {
-      step: "STAGE 4",
+      step: "STAGE 04",
       name: "Taxonomy Normalization",
-      desc: "Maps variant phrases to canonical schema and standardizes timestamps to ISO UTC.",
+      desc: "Standardizes variant event strings to canonical taxonomy and converts timestamps to ISO-8601 UTC.",
       count: funnel.effective_normalized_stored,
       unit: "canonical events",
-      status: "ACTIVE",
-      icon: CheckCircle2,
-      color: "#34d399"
+      status: "ACTIVE"
     },
     {
-      step: "STAGE 5",
-      name: "Zero Data Loss Noise Filter",
-      desc: "Tags low-value system chatter vs. high-value security events without dropping data.",
+      step: "STAGE 05",
+      name: "Zero-Loss Noise Classification",
+      desc: "Categorizes high-value security events vs. routine system chatter without dropping data.",
       count: funnel.high_value_security,
       unit: "security events",
-      status: "ACTIVE",
-      icon: ShieldCheck,
-      color: "#fbbf24"
+      status: "ACTIVE"
     },
     {
-      step: "STAGE 6",
-      name: "AI ML Anomaly & Threat Engine",
-      desc: "Runs Scikit-Learn Isolation Forest & sequence attack rule engine.",
+      step: "STAGE 06",
+      name: "AI ML Threat & Anomaly Engine",
+      desc: "Runs Scikit-Learn Isolation Forest & sequence attack rule engine for real-time triage.",
       count: funnel.threat_alerts,
-      unit: "threat alerts",
-      status: funnel.threat_alerts > 0 ? "ALERT" : "NOMINAL",
-      icon: Cpu,
-      color: "#fb7185"
+      unit: "threat detections",
+      status: funnel.threat_alerts > 0 ? "ALERT" : "NOMINAL"
     }
   ];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      <div className="cyber-card" style={{ padding: '1.25rem 1.5rem' }}>
-        <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-          <GitCommit size={22} color="#00f0ff" /> ASTERIA Pipeline Stage Monitor & Diagnostics
-        </h2>
-        <p style={{ fontSize: '0.825rem', color: '#94a3b8', marginTop: '0.2rem' }}>
-          Deep-dive monitoring into each modular pre-processing transformation stage in the log processing framework.
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+      
+      {/* Header Banner */}
+      <div className="eng-card" style={{ padding: '0.75rem 1rem' }}>
+        <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#f0f6fc' }}>
+          Pipeline Stage Monitor & Stage Diagnostics
+        </div>
+        <p style={{ fontSize: '0.76rem', color: '#8b949e', marginTop: '0.15rem' }}>
+          Modular breakdown of each sequential transformation stage in the Universal Log Pre-processing Framework.
         </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.25rem' }}>
-        {stages.map((st) => {
-          const Icon = st.icon;
-          return (
-            <div key={st.step} className="cyber-card" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#64748b' }} className="mono">{st.step}</span>
-                <span className={`badge-sev ${st.status === 'ALERT' ? 'badge-sev-critical' : 'badge-sev-low'}`}>
-                  {st.status}
-                </span>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <div style={{ background: 'rgba(0, 240, 255, 0.1)', padding: '0.6rem', borderRadius: '0.375rem' }}>
-                  <Icon size={22} color={st.color} />
-                </div>
-                <div>
-                  <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#f8fafc' }}>{st.name}</h3>
-                  <div style={{ fontSize: '1.3rem', fontWeight: 800, color: st.color, marginTop: '0.1rem' }} className="mono">
-                    {st.count.toLocaleString()} <span style={{ fontSize: '0.75rem', fontWeight: 500, color: '#94a3b8' }}>{st.unit}</span>
-                  </div>
-                </div>
-              </div>
-
-              <p style={{ fontSize: '0.8rem', color: '#94a3b8', lineHeight: 1.4, background: '#050811', padding: '0.65rem', borderRadius: '0.25rem', border: '1px solid #1b263b' }}>
-                {st.desc}
-              </p>
+      {/* Stages Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '0.75rem' }}>
+        {stages.map((st) => (
+          <div key={st.step} className="eng-card" style={{ padding: '0.85rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span className="mono" style={{ fontSize: '0.68rem', fontWeight: 700, color: '#6e7681' }}>{st.step}</span>
+              <span className={`badge-sev ${st.status === 'ALERT' ? 'badge-sev-critical' : 'badge-sev-low'}`}>
+                {st.status}
+              </span>
             </div>
-          );
-        })}
+
+            <div>
+              <h3 style={{ fontSize: '0.88rem', fontWeight: 700, color: '#f0f6fc' }}>{st.name}</h3>
+              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: st.status === 'ALERT' ? '#ef4444' : '#3b82f6', marginTop: '0.2rem' }} className="mono">
+                {st.count.toLocaleString()} <span style={{ fontSize: '0.72rem', fontWeight: 400, color: '#8b949e' }}>{st.unit}</span>
+              </div>
+            </div>
+
+            <p style={{ fontSize: '0.75rem', color: '#8b949e', lineHeight: 1.4, background: '#090d13', padding: '0.5rem 0.65rem', borderRadius: '2px', border: '1px solid #21262d' }}>
+              {st.desc}
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   );
